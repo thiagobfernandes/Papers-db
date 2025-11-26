@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  # -------------------------------------
+  # BANCO PRINCIPAL (BACKEND)
+  # -------------------------------------
+  database:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_DB}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+
+  database_notification:
+    image: mysql:8.0
+    container_name: mysql-notification
+    environment:
+      MYSQL_ROOT_PASSWORD: ${NOTIFICATION_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${NOTIFICATION_DATABASE_DB}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-notification-data:/var/lib/mysql
+    networks:
+      - app-network
+
+
+  backend:
+    build: ./BACK-END
+    container_name: exploit-backend
+    environment:
+      PORT: ${PORT}
+      DATABASE_PORT: ${DATABASE_PORT}
+      BACKEND_URL: ${BACKEND_URL}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_DB: ${DATABASE_DB}
+      HOST: ${HOST}  
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - "${PORT}:${PORT}"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - database
+      - cache
+    networks:
+      - app-network
+
+
+  notification:
+    build: ./NOTIFICATION
+    container_name: notification-service
+    environment:
+      NOTIFICATION_DATABASE_PORT: ${NOTIFICATION_DATABASE_PORT}
+      NOTIFICATION_DATABASE_USER: ${NOTIFICATION_DATABASE_USER}
+      NOTIFICATION_DATABASE_PASSWORD: ${NOTIFICATION_DATABASE_PASSWORD}
+      NOTIFICATION_DATABASE_DB: ${NOTIFICATION_DATABASE_DB}
+      NOTIFICATION_HOST: ${NOTIFICATION_HOST}
+      HOST: database_notification  
+
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_SECURE: ${MAIL_SECURE}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_FROM: ${MAIL_FROM}
+    ports:
+      - "3001:3001"
+    depends_on:
+      - database_notification
+      - cache
+    networks:
+      - app-network
+
+ 
+  cache:
+    image: redis:7.4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - cache:/data
+    networks:
+      - app-network
+
+  frontend:
+    build: ./FRONT-END
+    container_name: exploit-frontend
+    command: ["npm", "run", "dev"]
+    environment:
+      - HOST=0.0.0.0
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+
+
+  nginx:
+    build: ./NGINX
+    container_name: exploit-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app-network
+
+
+volumes:
+  mysql-data:
+  mysql-notification-data:
+  cache:
+
+
+networks:
+  app-network:
