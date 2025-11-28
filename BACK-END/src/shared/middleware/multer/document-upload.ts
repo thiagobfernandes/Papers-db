@@ -20,7 +20,11 @@ const MIME_TYPES = {
 
     'application/x-typescript': 'ts',
     'text/x-typescript': 'ts',
-
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
+    'image/png': 'png',
+    'image/gif': 'gif',
+    'image/webp': 'webp',
     'text/x-c': 'c',
     'text/x-csrc': 'c',
 

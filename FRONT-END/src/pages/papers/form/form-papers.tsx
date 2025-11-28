@@ -107,7 +107,7 @@ export const FormPapers = ({
 
       {!isEditing && (
         <Form.Item
-          label="Documento (PDF, DOCX, TXT - Máx 5MB)"
+          label="Arquivo (PDF, DOCX, TXT, PY, IMG ... - Máx 5MB)"
           validateStatus={errors.document ? "error" : ""}
           help={errors.document?.message as string}
         >

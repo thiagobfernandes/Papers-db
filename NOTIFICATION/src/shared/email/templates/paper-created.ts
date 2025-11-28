@@ -1,141 +1,132 @@
-export const PAPER_CREATED_TEMPLATE = `<!DOCTYPE html>
+export const PAPER_CREATED_TEMPLATE = `
+<!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="utf-8">
-  <title>Novo Paper no Papers JT!</title>
+  <meta charset="UTF-8">
+  <title>Novo Paper - Papers JT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* Design System: Cores e estilos críticos */
-    :root {
-      --color-bg-primary: #121212;
-      --color-bg-secondary: #1E1E1E;
-      --color-bg-tertiary: #2B2B2B;
-      --color-primary: #4A90E2;
-      --color-error: #FF6B6B;
-      --color-success: #4CAF50;
-      --color-text-primary: #EAEAEA;
-      --color-text-secondary: #A0A0A0;
-      --border-radius: 10px;
-      --shadow-md: 0 2px 8px #0002;
-    }
-    body {
-      background-color: var(--color-bg-primary);
-      color: var(--color-text-primary);
-      margin: 0;
-      font-family: 'Inter', 'Roboto', Arial, sans-serif;
-      line-height: 1.7;
-    }
-    .container {
-      max-width: 720px;
-      margin: 32px auto;
-      background: var(--color-bg-secondary);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-md);
-      border: 1px solid #232323;
-      padding: 0;
-      overflow: hidden;
-    }
-    .header {
-      background: var(--color-bg-tertiary);
-      padding: 32px 0 24px 0;
-      text-align: center;
-      border-bottom: 1px solid #333;
-    }
-    .header h2 {
-      color: var(--color-primary);
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 0;
-      letter-spacing: 0.01em;
-    }
-    .content {
-      padding: 32px 42px 20px 42px;
-    }
-    @media (max-width: 600px) {
-      .container { max-width: 96vw; padding: 0 }
-      .content { padding: 18px 8vw; }
-      .header { padding: 24px 0 16px 0;}
-    }
-    .details-list {
-      margin: 32px 0 28px 0;
-      padding: 0;
-      display: grid;
-      grid-gap: 14px;
-    }
-    .details-list li {
-      background: var(--color-bg-tertiary);
-      padding: 16px 18px;
-      border-radius: 7px;
-      color: var(--color-text-primary);
-      font-size: 1.07rem;
-      font-weight: 400;
-      border-left: 4px solid var(--color-primary);
-      box-shadow: 0 1px 2px #2223;
-      display: flex;
-      align-items: center;
-    }
-    .details-list li strong { font-weight: 600; color: var(--color-primary); margin-right: 8px; }
-    .button {
-      background: var(--color-primary);
-      color: #fff !important;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border-radius: 6px;
-      padding: 14px 34px;
-      display: inline-block;
-      margin-top: 15px;
-      text-decoration: none;
-      transition: background .2s;
-      border: none;
-      box-shadow: 0 0 0 2px #245a8f3b;
-    }
-    .button:hover { background: #3A74C1; }
-    .footer {
-      background: var(--color-bg-tertiary);
-      font-size: .88em;
-      text-align: center;
-      color: var(--color-text-secondary);
-      padding: 18px 0;
-      border-top: 1px solid #333;
-    }
-  </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h2>📰 Novo Paper Publicado no Papers JT</h2>
-    </div>
-    <div class="content">
-      <p>Olá <span style="font-weight: bold; color: var(--color-primary);">{{name}}</span>,</p>
-      <p>
-        Um novo artigo técnico foi publicado na plataforma Papers JT – aproveite conteúdo aprofundado sobre <strong style="color: var(--color-primary);">segurança e vulnerabilidades</strong>.
-      </p>
-      <ul class="details-list">
-        <li><strong>Título:</strong> {{subject}}</li>
-        <li><strong>Autor:</strong> {{author}}</li>
-        <li><strong>Resumo:</strong> {{body}}</li>
-        <li><strong>Publicado em:</strong> {{sentAt}}</li>
-      </ul>
-      <div style="text-align:center;">
-        <a href="{{link}}" class="button" target="_blank">Ver o Paper Completo</a>
-      </div>
-      <p style="margin-top:32px; color: var(--color-text-secondary); text-align:center;">
-        Fique por dentro das novidades em Papers JT.<br>Seu hub de conhecimento em segurança.
-      </p>
-    </div>
-    <div class="footer">
-      Notificação automática do Papers JT • Dark Mode nativo • Design System aplicado
-    </div>
-  </div>
+
+<body style="margin:0; padding:0; background:#121212; font-family:Arial, sans-serif; color:#EAEAEA;">
+
+  <!-- Container -->
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#121212">
+    <tr>
+      <td align="center" style="padding:30px 0;">
+
+        <table width="720" cellpadding="0" cellspacing="0" bgcolor="#1E1E1E" 
+               style="width:720px; max-width:720px; border-radius:10px; border:1px solid #232323;">
+
+          <!-- Header -->
+          <tr>
+            <td bgcolor="#2B2B2B" style="padding:32px 0 24px 0; text-align:center; border-bottom:1px solid #333;">
+              <h2 style="color:#4A90E2; margin:0; font-size:28px; font-weight:700;">
+                📰 Novo Paper Publicado no Papers JT
+              </h2>
+            </td>
+          </tr>
+
+          <!-- Content -->
+          <tr>
+            <td style="padding:32px 42px 20px 42px; color:#EAEAEA;">
+
+              <p style="margin:0 0 16px 0; font-size:16px;">
+                Olá <span style="font-weight:bold; color:#4A90E2;">{{name}}</span>,
+              </p>
+
+              <p style="margin:0 0 24px 0; color:#EAEAEA; font-size:16px;">
+                Um novo artigo técnico foi publicado na plataforma Papers JT – aproveite conteúdo aprofundado sobre
+                <strong style="color:#4A90E2;">segurança e vulnerabilidades</strong>.
+              </p>
+
+              <!-- Lista -->
+              <table width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="padding:0;">
+
+                    <!-- Item -->
+                    <table width="100%" cellspacing="0" cellpadding="0" 
+                           style="margin-bottom:14px; background:#2B2B2B; border-left:4px solid #4A90E2; border-radius:6px;">
+                      <tr>
+                        <td style="padding:16px 18px; color:#EAEAEA; font-size:16px;">
+                          <strong style="color:#4A90E2;">Título:</strong> {{subject}}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Item -->
+                    <table width="100%" cellspacing="0" cellpadding="0" 
+                           style="margin-bottom:14px; background:#2B2B2B; border-left:4px solid #4A90E2; border-radius:6px;">
+                      <tr>
+                        <td style="padding:16px 18px; color:#EAEAEA; font-size:16px;">
+                          <strong style="color:#4A90E2;">Autor:</strong> {{author}}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Item -->
+                    <table width="100%" cellspacing="0" cellpadding="0" 
+                           style="margin-bottom:14px; background:#2B2B2B; border-left:4px solid #4A90E2; border-radius:6px;">
+                      <tr>
+                        <td style="padding:16px 18px; color:#EAEAEA; font-size:16px;">
+                          <strong style="color:#4A90E2;">Resumo:</strong> {{body}}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Item -->
+                    <table width="100%" cellspacing="0" cellpadding="0" 
+                           style="margin-bottom:14px; background:#2B2B2B; border-left:4px solid #4A90E2; border-radius:6px;">
+                      <tr>
+                        <td style="padding:16px 18px; color:#EAEAEA; font-size:16px;">
+                          <strong style="color:#4A90E2;">Publicado em:</strong> {{sentAt}}
+                        </td>
+                      </tr>
+                    </table>
+
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Botão -->
+              <div style="text-align:center; margin-top:30px;">
+                <a href="{{link}}" download   
+                   style="background:#4A90E2; color:#fff; font-size:18px; font-weight:bold;
+                          text-decoration:none; padding:14px 34px; border-radius:6px; display:inline-block;">
+                  Ver o Paper Completo
+                </a>
+              </div>
+
+              <p style="margin:32px 0 0 0; color:#A0A0A0; text-align:center; font-size:14px;">
+                Fique por dentro das novidades em Papers JT.<br>
+                Seu hub de conhecimento em segurança.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td bgcolor="#2B2B2B" style="padding:18px 0; text-align:center; color:#A0A0A0; font-size:13px; border-top:1px solid #333;">
+              Notificação automática do Papers JT • Dark Mode nativo
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>
 `;
 
 export interface TemplateData {
-    name: string;
-    subject: string; // Título do paper
-    body: string; // Resumo do paper
-    author: string; // Autor do paper
-    link: string; 
-    sentAt: string;
+  name: string;
+  subject: string; // Título do paper
+  body: string; // Resumo do paper
+  author: string; // Autor do paper
+  link: string;
+  sentAt: string;
 }

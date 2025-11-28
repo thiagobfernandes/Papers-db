@@ -1,16 +1,77 @@
 import { CreatePapersRepositoryProtocolInterface } from '../domain/repositories/create-papers';
 import { Papers } from '../domain/entities/papers';
 import { CreatePapersUseCase } from '../application/usecases/create-papers';
+import { PublisherService } from '../../../shared/queue/queue';
+import { FindAllUserRepository } from '../../users/infra/repositories/find-all';
+
+jest.mock('../../../shared/helpers/logger', () => ({
+    Logger: {
+        info: jest.fn(),
+        error: jest.fn(),
+        warn: jest.fn(),
+        debug: jest.fn(),
+    },
+}));
+
+jest.mock('../../../shared/http/protocols', () => ({
+    ok: jest.fn(),
+    badRequest: jest.fn(),
+    serverError: jest.fn(),
+    notFound: jest.fn(),
+}));
+
+jest.mock('../../../shared/schemas/app-config-env', () => ({
+    AppConfigSchema: {
+        loadConfig: jest.fn().mockReturnValue({
+            PORT: 3000,
+            DATABASE_PORT: 5432,
+            DATABASE_USER: 'test',
+            DATABASE_PASSWORD: 'test',
+            JWT_SECRET: 'test-secret',
+            DATABASE_DB: 'test_db',
+            HOST: 'localhost',
+            REDIS_HOST: 'localhost',
+            BACKEND_URL: 'http://localhost:3000',
+            REDIS_PASSWORD: 'test',
+        }),
+    },
+}));
+
+// Mock do PublisherService
+jest.mock('../../../shared/queue/queue', () => ({
+    PublisherService: jest.fn().mockImplementation(() => ({
+        publish: jest.fn().mockResolvedValue(undefined),
+    })),
+}));
+
+// Mock do FindAllUserRepository
+jest.mock('../../users/infra/repositories/find-all', () => ({
+    FindAllUserRepository: jest.fn().mockImplementation(() => ({
+        execute: jest.fn().mockResolvedValue([]),
+    })),
+}));
 
 describe('CreatePapersUseCase', () => {
     let createPapersUseCase: CreatePapersUseCase;
     let createPapersRepository: CreatePapersRepositoryProtocolInterface;
+    let publisherService: PublisherService;
+    let findAllUser: FindAllUserRepository;
 
     beforeEach(() => {
+        jest.clearAllMocks();
+        
         createPapersRepository = {
-            execute: jest.fn(),
+            execute: jest.fn().mockResolvedValue(undefined),
         };
-        createPapersUseCase = new CreatePapersUseCase(createPapersRepository);
+        
+        publisherService = new PublisherService();
+        findAllUser = new FindAllUserRepository();
+        
+        createPapersUseCase = new CreatePapersUseCase(
+            createPapersRepository,
+            publisherService,
+            findAllUser
+        );
     });
 
     it('deve criar um paper com sucesso', async () => {
@@ -18,10 +79,9 @@ describe('CreatePapersUseCase', () => {
             title: 'Título do Paper',
             language: 'Português',
             platformId: 1,
+            documentPath: "THIAGOLIndo.pdf"
         };
         const userId = 1;
-
-        (createPapersRepository.execute as jest.Mock).mockResolvedValue(undefined);
 
         const result = await createPapersUseCase.execute(params, userId);
 
@@ -29,7 +89,10 @@ describe('CreatePapersUseCase', () => {
         expect(result.title).toBe('Título do Paper');
         expect(result.language).toBe('Português');
         expect(result.platformId).toBe(1);
-        expect(createPapersRepository.execute).toHaveBeenCalledWith(expect.any(Papers), userId);
+        expect(createPapersRepository.execute).toHaveBeenCalledWith(
+            expect.any(Papers),
+            userId
+        );
     });
 
     it('deve criar um paper com documentPath opcional', async () => {
@@ -41,13 +104,14 @@ describe('CreatePapersUseCase', () => {
         };
         const userId = 2;
 
-        (createPapersRepository.execute as jest.Mock).mockResolvedValue(undefined);
-
         const result = await createPapersUseCase.execute(params, userId);
 
         expect(result).toBeInstanceOf(Papers);
         expect(result.documentPath).toBe('/path/to/document.pdf');
-        expect(createPapersRepository.execute).toHaveBeenCalledWith(expect.any(Papers), userId);
+        expect(createPapersRepository.execute).toHaveBeenCalledWith(
+            expect.any(Papers),
+            userId
+        );
     });
 
     it('deve lançar erro se o título tiver menos de 3 caracteres', async () => {

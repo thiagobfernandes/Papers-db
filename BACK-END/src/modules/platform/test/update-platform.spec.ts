@@ -95,17 +95,7 @@ describe('UpdatePlatformUseCase', () => {
         });
     });
 
-    it('deve lançar erro se o nome contiver números', async () => {
-        const params = {
-            name: 'Plataforma 123',
-        };
-        const platformId = 1;
-
-        await expect(updatePlatformUseCase.execute(params, platformId)).rejects.toMatchObject({
-            statusCode: 400,
-            message: 'Título do paper não deve conter números',
-        });
-    });
+  
 
     it('deve atualizar plataforma com nome válido', async () => {
         const params = {

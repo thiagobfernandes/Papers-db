@@ -3,6 +3,23 @@ import { FindPapersByIdRepositoryProtocolInterface } from '../domain/repositorie
 import { Papers } from '../domain/entities/papers';
 import { UpdatePapersUseCase } from '../application/usecases/update-papers';
 
+// Mock dos módulos que causam problemas
+jest.mock('../../../shared/helpers/logger', () => ({
+    Logger: {
+        info: jest.fn(),
+        error: jest.fn(),
+        warn: jest.fn(),
+        debug: jest.fn(),
+    },
+}));
+
+jest.mock('../../../shared/http/protocols', () => ({
+    ok: jest.fn(),
+    badRequest: jest.fn(),
+    serverError: jest.fn(),
+    notFound: jest.fn(),
+}));
+
 describe('UpdatePapersUseCase', () => {
     let updatePapersUseCase: UpdatePapersUseCase;
     let updatePapersRepository: UpdatePapersRepositoryProtocolInterface;
@@ -19,6 +36,10 @@ describe('UpdatePapersUseCase', () => {
             updatePapersRepository,
             findPapersByIdRepository
         );
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     it('deve atualizar um paper com sucesso', async () => {

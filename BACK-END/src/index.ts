@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'ExploitDB API Documentation'
 }));

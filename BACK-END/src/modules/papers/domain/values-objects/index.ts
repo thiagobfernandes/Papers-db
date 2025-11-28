@@ -30,9 +30,7 @@ export const TitleValidation = (title: string): string  => {
     if (title.length > 255) {
         throw error("Título do paper deve ter no máximo 255 caracteres", "TitleValidation");
     }
-    if (/\d/.test(title)) {
-        throw error("Título do paper não deve conter números", "TitleValidation");
-    }
+   
     return title;
 }
 
